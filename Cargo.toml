@@ -16,13 +16,14 @@ rust-version = "1.77"
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = ["ffi", "repl", "hostname", "tls", "http", "crypto-full"]
+default = ["ffi", "repl", "hostname", "tls", "http", "crypto-full", "special-math"]
 ffi = ["dep:libffi"]
 repl = ["dep:crossterm", "dep:ctrlc", "dep:rustyline"]
 hostname = ["dep:hostname"]
 tls = ["dep:native-tls"]
 http = ["dep:warp", "dep:reqwest"]
 crypto-full = []
+special-math = ["dep:puruspe"]
 "rust-version-1.80" = []
 
 [build-dependencies]
@@ -62,6 +63,7 @@ scryer-modular-bitfield = "0.11.4"
 num-order = { version = "1.2.0" }
 ordered-float = "4.2.2"
 phf = { version = "0.11", features = ["macros"] }
+puruspe = { version = "0.3.0", optional = true }
 rand = "0.8.5"
 regex = "1.10.6"
 ring = { version = "0.17.8", features = ["wasm32_unknown_unknown_js"] }
