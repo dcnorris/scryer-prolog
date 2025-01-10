@@ -515,6 +515,9 @@ enum SystemClauseType {
     #[cfg(feature = "crypto-full")]
     #[strum_discriminants(strum(props(Arity = "6", Name = "$crypto_data_decrypt")))]
     CryptoDataDecrypt,
+    #[cfg(feature = "special-math")]
+    #[strum_discriminants(strum(props(Arity = "2", Name = "$erf")))]
+    Erf,
     #[strum_discriminants(strum(props(Arity = "4", Name = "$ed25519_sign_raw")))]
     Ed25519SignRaw,
     #[strum_discriminants(strum(props(Arity = "4", Name = "$ed25519_verify_raw")))]
@@ -1930,6 +1933,12 @@ fn generate_instruction_preface() -> TokenStream {
                         functor!(atom!("call"), [atom(name), fixnum(arity)])
                     }
                     //
+                    #[cfg(feature = "special-math")]
+                    &Instruction::CallErf => {
+                        let (name, arity) = self.to_name_and_arity();
+                        functor!(atom!("call"), [atom(name), fixnum(arity)])
+                    }
+                    //
                     &Instruction::ExecuteAtomChars |
                     &Instruction::ExecuteAtomCodes |
                     &Instruction::ExecuteAtomLength |
@@ -2164,6 +2173,12 @@ fn generate_instruction_preface() -> TokenStream {
                     #[cfg(feature = "crypto-full")]
                     &Instruction::ExecuteCryptoDataEncrypt |
                     &Instruction::ExecuteCryptoDataDecrypt => {
+                        let (name, arity) = self.to_name_and_arity();
+                        functor!(atom!("execute"), [atom(name), fixnum(arity)])
+                    }
+                    //
+                    #[cfg(feature = "special-math")]
+                    &Instruction::ExecuteErf => {
                         let (name, arity) = self.to_name_and_arity();
                         functor!(atom!("execute"), [atom(name), fixnum(arity)])
                     }

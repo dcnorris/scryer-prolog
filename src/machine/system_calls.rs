@@ -83,6 +83,9 @@ use sha3::{Sha3_224, Sha3_256, Sha3_384, Sha3_512};
 
 use crrl::{ed25519, secp256k1, x25519};
 
+#[cfg(feature = "special-math")]
+use puruspe::error::erf;
+
 #[cfg(feature = "tls")]
 use native_tls::{Identity, TlsAcceptor, TlsConnector};
 
@@ -7746,6 +7749,23 @@ impl Machine {
             self.machine_st.registers[6],
             complete_string
         );
+    }
+
+    #[cfg(feature = "special-math")]
+    #[inline(always)]
+    pub(crate) fn erf(&mut self) {
+        let x = self.deref_register(1);
+        let x = match Number::try_from(x) {
+            Ok(Number::Float(n)) => n.into_inner(),
+            Ok(Number::Fixnum(n)) => n.get_num() as f64,
+            Ok(Number::Integer(n)) => n.to_f64().value(),
+            _ => {
+                unreachable!()
+            }
+        };
+        let erf_x = float_alloc!(erf(x), self.machine_st.arena);
+        let return_value = self.deref_register(2);
+        self.machine_st.unify_f64(erf_x, return_value);
     }
 
     #[inline(always)]
