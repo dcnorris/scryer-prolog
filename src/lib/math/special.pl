@@ -3,19 +3,9 @@
 The underlying Rust implementations come from the puruspe crate.
 */
 
-%% TODO: Discuss the general applicability of a policy like this,
-%%       which was suggested in GitHub comment by @adri326.
-/*
-:- initialization(('$special_math_enabled'(Enabled),
-                   (   Enabled = 1, !
-                   ;   write("The rust feature flag 'special-math' must be enabled to use library(math/special)."),
-                       fail
-                   ))).
-*/
-
 :- module(special, [
               erf/2
-                  %,erfc/2
+              ,erfc/2
                   %,inverf/2
                   %,inverfc/2
                   %,gamma/2
@@ -30,6 +20,9 @@ The underlying Rust implementations come from the puruspe crate.
 %% erf(+X, -Erf)
 %
 % Erf is erf(X).
+% TODO: This could be an opportunity to include formatted math via Djot;
+% https://htmlpreview.github.io/?https://github.com/jgm/djot/blob/master/doc/syntax.html#math
+% TODO: Include Djot references to NIST DLMF?  Or defer to puruspe's documentation?
 erf(X, Erf) :-
     builtins:must_be_number(X, erf/2),
     '$erf'(X, Erf).
@@ -37,6 +30,9 @@ erf(X, Erf) :-
 %% TODO: erfc(+X, -Erfc)
 %
 % Erfc is erfc(X).
+erfc(X, Erfc) :-
+    builtins:must_be_number(X, erfc/2),
+    '$erfc'(X, Erfc).
 
 %% TODO: inverf(+X, -InvErf)
 %

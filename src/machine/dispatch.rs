@@ -4523,14 +4523,20 @@ impl Machine {
                         self.crypto_data_decrypt();
                         step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
                     }
-                    #[cfg(feature = "special-math")]
                     &Instruction::CallErf => {
                         self.erf();
                         step_or_fail!(self, self.machine_st.p += 1);
                     }
-                    #[cfg(feature = "special-math")]
                     &Instruction::ExecuteErf => {
                         self.erf();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
+                    &Instruction::CallErfc => {
+                        self.erfc();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteErfc => {
+                        self.erfc();
                         step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
                     }
                     &Instruction::CallCryptoCurveScalarMult => {
