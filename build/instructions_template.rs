@@ -515,6 +515,16 @@ enum SystemClauseType {
     #[cfg(feature = "crypto-full")]
     #[strum_discriminants(strum(props(Arity = "6", Name = "$crypto_data_decrypt")))]
     CryptoDataDecrypt,
+    #[strum_discriminants(strum(props(Arity = "2", Name = "$gamma")))]
+    Gamma,
+    #[strum_discriminants(strum(props(Arity = "2", Name = "$ln_gamma")))]
+    LnGamma,
+    #[strum_discriminants(strum(props(Arity = "3", Name = "$gammp")))]
+    GammP,
+    #[strum_discriminants(strum(props(Arity = "3", Name = "$gammq")))]
+    GammQ,
+    #[strum_discriminants(strum(props(Arity = "3", Name = "$invgammp")))]
+    InvGammP,
     #[strum_discriminants(strum(props(Arity = "2", Name = "$erf")))]
     Erf,
     #[strum_discriminants(strum(props(Arity = "2", Name = "$erfc")))]
@@ -1938,6 +1948,11 @@ fn generate_instruction_preface() -> TokenStream {
                         functor!(atom!("call"), [atom(name), fixnum(arity)])
                     }
                     //
+                    &Instruction::CallGamma |
+                    &Instruction::CallGammP |
+                    &Instruction::CallGammQ |
+                    &Instruction::CallInvGammP |
+                    &Instruction::CallLnGamma |
                     &Instruction::CallErf |
                     &Instruction::CallErfc |
                     &Instruction::CallInvErf |
@@ -2183,6 +2198,11 @@ fn generate_instruction_preface() -> TokenStream {
                         functor!(atom!("execute"), [atom(name), fixnum(arity)])
                     }
                     //
+                    &Instruction::ExecuteGamma |
+                    &Instruction::ExecuteGammP |
+                    &Instruction::ExecuteGammQ |
+                    &Instruction::ExecuteInvGammP |
+                    &Instruction::ExecuteLnGamma |
                     &Instruction::ExecuteErf |
                     &Instruction::ExecuteErfc |
                     &Instruction::ExecuteInvErf |

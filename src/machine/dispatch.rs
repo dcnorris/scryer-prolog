@@ -4523,6 +4523,46 @@ impl Machine {
                         self.crypto_data_decrypt();
                         step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
                     }
+                    &Instruction::CallGamma => {
+                        self.gamma();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteGamma => {
+                        self.gamma();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
+                    &Instruction::CallLnGamma => {
+                        self.ln_gamma();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteLnGamma => {
+                        self.ln_gamma();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
+                    &Instruction::CallGammP => {
+                        self.gammp();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteGammP => {
+                        self.gammp();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
+                    &Instruction::CallInvGammP => {
+                        self.invgammp();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteInvGammP => {
+                        self.invgammp();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
+                    &Instruction::CallGammQ => {
+                        self.gammq();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteGammQ => {
+                        self.gammq();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
                     &Instruction::CallErf => {
                         self.erf();
                         step_or_fail!(self, self.machine_st.p += 1);
