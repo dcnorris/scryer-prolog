@@ -515,9 +515,10 @@ enum SystemClauseType {
     #[cfg(feature = "crypto-full")]
     #[strum_discriminants(strum(props(Arity = "6", Name = "$crypto_data_decrypt")))]
     CryptoDataDecrypt,
-    #[cfg(feature = "special-math")]
     #[strum_discriminants(strum(props(Arity = "2", Name = "$erf")))]
     Erf,
+    #[strum_discriminants(strum(props(Arity = "2", Name = "$erfc")))]
+    Erfc,
     #[strum_discriminants(strum(props(Arity = "4", Name = "$ed25519_sign_raw")))]
     Ed25519SignRaw,
     #[strum_discriminants(strum(props(Arity = "4", Name = "$ed25519_verify_raw")))]
@@ -1933,12 +1934,11 @@ fn generate_instruction_preface() -> TokenStream {
                         functor!(atom!("call"), [atom(name), fixnum(arity)])
                     }
                     //
-                    #[cfg(feature = "special-math")]
-                    &Instruction::CallErf => {
+                    &Instruction::CallErf |
+                    &Instruction::CallErfc => {
                         let (name, arity) = self.to_name_and_arity();
                         functor!(atom!("call"), [atom(name), fixnum(arity)])
                     }
-                    //
                     &Instruction::ExecuteAtomChars |
                     &Instruction::ExecuteAtomCodes |
                     &Instruction::ExecuteAtomLength |
@@ -2177,12 +2177,11 @@ fn generate_instruction_preface() -> TokenStream {
                         functor!(atom!("execute"), [atom(name), fixnum(arity)])
                     }
                     //
-                    #[cfg(feature = "special-math")]
-                    &Instruction::ExecuteErf => {
+                    &Instruction::ExecuteErf |
+                    &Instruction::ExecuteErfc => {
                         let (name, arity) = self.to_name_and_arity();
                         functor!(atom!("execute"), [atom(name), fixnum(arity)])
                     }
-                    //
                     &Instruction::Deallocate => {
                         functor!(atom!("deallocate"))
                     }

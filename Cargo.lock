@@ -1423,6 +1423,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "lambert_w"
+version = "1.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e64011df08b5624a049d8999b20ed8cc3a70e7809ded66e708cc4efa354c1dc9"
+
+[[package]]
 name = "lazy_static"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2133,6 +2139,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "puruspe"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5666f1226a41ebb7191b702947674f4814c9919da58a9f91a60090412664bbce"
+dependencies = [
+ "lambert_w",
+]
+
+[[package]]
 name = "quick-xml"
 version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2584,6 +2599,7 @@ dependencies = [
  "pprof",
  "predicates-core",
  "proc-macro2",
+ "puruspe",
  "quote",
  "rand",
  "regex",
