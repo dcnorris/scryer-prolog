@@ -8,10 +8,11 @@ The underlying Rust implementations come from the puruspe crate.
               ,erfc/2
               ,inverf/2
               ,inverfc/2
-                  %,gamma/2
-                  %,gammq/3
-                  %,invgammp/3
-                  %,ln_gamma/2
+              ,gamma/2
+              ,gammp/3
+              ,gammq/3
+              ,invgammp/3
+              ,ln_gamma/2
                   %,beta/3
                   %,betai/4
                   %,invbetai/4
@@ -50,33 +51,56 @@ inverfc(ErfcX, X) :-
     builtins:must_be_number(ErfcX, inverfc/2),
     '$inverfc'(ErfcX, X).
 
-%% TODO: gamma(+X, -Gamma)
+%% gamma(+X, -Gamma)
 %
 % Gamma is Γ(X).
+gamma(X, Gamma) :-
+    builtins:must_be_number(X, gamma/2),
+    '$gamma'(X, Gamma).
 
-%% TODO: gammp(+A, +X, -P)
+%% gammp(+A, +X, -P)
 %
-% P is P(A,X), the regularized _lower_ incomplete gamma function.
+% P is γ(A,X)/Γ(A), the regularized _lower_ incomplete gamma function.
 % X ≥ 0 is the upper limit of integration
 % A > 0 is the shape parameter
+gammp(A, X, P) :-
+    builtins:must_be_number(A, gammp/3),
+    builtins:must_be_number(X, gammp/3),
+    '$gammp'(A, X, P).
 
-%% TODO: gammq(+A, +X, -Q)
+%% gammq(+A, +X, -Q)
 %
-% Q is Q(A,X) := Γ(A,X)/Γ(A), the regularized _upper_ incomplete gamma
-% function.
+% Q is Γ(A,X)/Γ(A), the regularized _upper_ incomplete gamma function.
 % X ≥ 0 is the lower limit of integration
 % A > 0 is the shape parameter
+gammq(A, X, Q) :-
+    builtins:must_be_number(A, gammq/3),
+    builtins:must_be_number(X, gammq/3),
+    '$gammq'(A, X, Q).
 
-%% TODO: invgammp(+P, +A, -X)
+%% invgammp(+P, +A, -X)
 %
 % X is the unique solution of P = P(A,X), where P(-,-) is the
 % regularized lower incomplete gamma function.
 % P ∈ [0,1] is a probability
 % A > 0 is the _shape parameter_
+invgammp(P, A, -X) :-
+    builtins:must_be_number(P, invgammp/3),
+    builtins:must_be_number(A, invgammp/3),
+    '$invgammp'(P, A, X).
 
-%% TODO: ln_gamma(+Z, -LnGamma)
+/* TODO: Investigate this..  Is there some issue of principal
+         values to consider?
+?- A = 3, X = 1.2, gammp(A, X, P), invgammp(P, A, Xb).
+   A = 3, X = 1.2, P = 0.12051290121804392, Xb = - (1.2).
+*/
+
+%% ln_gamma(+X, -LnGamma)
 %
-% LnGamma is ln(Γ(Z)), the natural logarithm of Γ(Z).
+% LnGamma is ln(Γ(X)), the natural logarithm of Γ(X).
+ln_gamma(X, LnGamma) :-
+    builtins:must_be_number(X, ln_gamma/2),
+    '$ln_gamma'(X, LnGamma).
 
 %% TODO: beta(+Z, +W, -B)
 %
