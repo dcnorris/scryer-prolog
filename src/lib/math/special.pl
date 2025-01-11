@@ -3,6 +3,16 @@
 The underlying Rust implementations come from the puruspe crate.
 */
 
+%% TODO: Discuss the general applicability of a policy like this,
+%%       which was suggested in GitHub comment by @adri326.
+/*
+:- initialization(('$special_math_enabled'(Enabled),
+                   (   Enabled = 1, !
+                   ;   write("The rust feature flag 'special-math' must be enabled to use library(math/special)."),
+                       fail
+                   ))).
+*/
+
 :- module(special, [
               erf/2
                   %,erfc/2
@@ -20,7 +30,9 @@ The underlying Rust implementations come from the puruspe crate.
 %% erf(+X, -Erf)
 %
 % Erf is erf(X).
-erf(X, Erf) :- '$erf'(X, Erf).
+erf(X, Erf) :-
+    builtins:must_be_number(X, erf/2),
+    '$erf'(X, Erf).
 
 %% TODO: erfc(+X, -Erfc)
 %
