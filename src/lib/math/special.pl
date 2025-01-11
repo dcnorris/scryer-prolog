@@ -6,8 +6,8 @@ The underlying Rust implementations come from the puruspe crate.
 :- module(special, [
               erf/2
               ,erfc/2
-                  %,inverf/2
-                  %,inverfc/2
+              ,inverf/2
+              ,inverfc/2
                   %,gamma/2
                   %,gammq/3
                   %,invgammp/3
@@ -27,20 +27,28 @@ erf(X, Erf) :-
     builtins:must_be_number(X, erf/2),
     '$erf'(X, Erf).
 
-%% TODO: erfc(+X, -Erfc)
+%% erfc(+X, -Erfc)
 %
 % Erfc is erfc(X).
 erfc(X, Erfc) :-
     builtins:must_be_number(X, erfc/2),
     '$erfc'(X, Erfc).
 
-%% TODO: inverf(+X, -InvErf)
+%% inverf(+ErfX, -X)
 %
-% InvErf is erf⁻¹(X). % TODO: Check this; puruspe docs have a mistake.
+% X is erf⁻¹(ErfX).
+% ErfX ∈ (-1, 1)
+inverf(ErfX, X) :-
+    builtins:must_be_number(ErfX, inverf/2),
+    '$inverf'(ErfX, X).
 
-%% TODO: inverfc(+X, -InvErfc)
+%% inverfc(+ErfcX, -X)
 %
-% InvErfc is erfc⁻¹(X). % TODO: Check this; puruspe docs have a mistake.
+% X is erfc⁻¹(ErfcX).
+% ErfcX ∈ (0, 2)
+inverfc(ErfcX, X) :-
+    builtins:must_be_number(ErfcX, inverfc/2),
+    '$inverfc'(ErfcX, X).
 
 %% TODO: gamma(+X, -Gamma)
 %

@@ -4539,6 +4539,22 @@ impl Machine {
                         self.erfc();
                         step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
                     }
+                    &Instruction::CallInvErf => {
+                        self.inverf();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteInvErf => {
+                        self.inverf();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
+                    &Instruction::CallInvErfc => {
+                        self.inverfc();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteInvErfc => {
+                        self.inverfc();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
                     &Instruction::CallCryptoCurveScalarMult => {
                         self.crypto_curve_scalar_mult();
                         step_or_fail!(self, self.machine_st.p += 1);

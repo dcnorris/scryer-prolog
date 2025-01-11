@@ -519,6 +519,10 @@ enum SystemClauseType {
     Erf,
     #[strum_discriminants(strum(props(Arity = "2", Name = "$erfc")))]
     Erfc,
+    #[strum_discriminants(strum(props(Arity = "2", Name = "$inverf")))]
+    InvErf,
+    #[strum_discriminants(strum(props(Arity = "2", Name = "$inverfc")))]
+    InvErfc,
     #[strum_discriminants(strum(props(Arity = "4", Name = "$ed25519_sign_raw")))]
     Ed25519SignRaw,
     #[strum_discriminants(strum(props(Arity = "4", Name = "$ed25519_verify_raw")))]
@@ -1935,7 +1939,9 @@ fn generate_instruction_preface() -> TokenStream {
                     }
                     //
                     &Instruction::CallErf |
-                    &Instruction::CallErfc => {
+                    &Instruction::CallErfc |
+                    &Instruction::CallInvErf |
+                    &Instruction::CallInvErfc => {
                         let (name, arity) = self.to_name_and_arity();
                         functor!(atom!("call"), [atom(name), fixnum(arity)])
                     }
@@ -2178,7 +2184,9 @@ fn generate_instruction_preface() -> TokenStream {
                     }
                     //
                     &Instruction::ExecuteErf |
-                    &Instruction::ExecuteErfc => {
+                    &Instruction::ExecuteErfc |
+                    &Instruction::ExecuteInvErf |
+                    &Instruction::ExecuteInvErfc => {
                         let (name, arity) = self.to_name_and_arity();
                         functor!(atom!("execute"), [atom(name), fixnum(arity)])
                     }
