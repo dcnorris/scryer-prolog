@@ -3,7 +3,7 @@
 The underlying Rust implementations come from the puruspe crate.
 */
 
-:- module(special, [
+:- module(special_functions, [
               erf/2
               ,erfc/2
               ,inverf/2
