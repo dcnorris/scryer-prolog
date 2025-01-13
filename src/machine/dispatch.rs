@@ -4523,6 +4523,30 @@ impl Machine {
                         self.crypto_data_decrypt();
                         step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
                     }
+                    &Instruction::CallBeta => {
+                        self.beta();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteBeta => {
+                        self.beta();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
+                    &Instruction::CallBetaI => {
+                        self.betai();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteBetaI => {
+                        self.betai();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
+                    &Instruction::CallInvBetaI => {
+                        self.invbetai();
+                        step_or_fail!(self, self.machine_st.p += 1);
+                    }
+                    &Instruction::ExecuteInvBetaI => {
+                        self.invbetai();
+                        step_or_fail!(self, self.machine_st.p = self.machine_st.cp);
+                    }
                     &Instruction::CallGamma => {
                         self.gamma();
                         step_or_fail!(self, self.machine_st.p += 1);

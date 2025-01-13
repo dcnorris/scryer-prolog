@@ -2,6 +2,7 @@ use crate::machine::Number;
 use crate::Machine;
 use puruspe::error::*;
 use puruspe::gamma::*;
+use puruspe::beta::*;
 
 macro_rules! number_as_f64 {
     ($x: expr) => {{
@@ -89,6 +90,32 @@ impl Machine {
         let x = number_as_f64!(self.deref_register(1));
         let ln_gamma_x = float_alloc!(ln_gamma(x), self.machine_st.arena);
         return_f64_reg!(self, ln_gamma_x, 2);
+    }
+
+    #[inline(always)]
+    pub(crate) fn beta(&mut self) {
+        let x = number_as_f64!(self.deref_register(1));
+        let y = number_as_f64!(self.deref_register(2));
+        let beta_x_y = float_alloc!(beta(x,y), self.machine_st.arena);
+        return_f64_reg!(self, beta_x_y, 3);
+    }
+
+    #[inline(always)]
+    pub(crate) fn betai(&mut self) {
+        let a = number_as_f64!(self.deref_register(1));
+        let b = number_as_f64!(self.deref_register(2));
+        let x = number_as_f64!(self.deref_register(3));
+        let betai_a_b_x = float_alloc!(betai(a,b,x), self.machine_st.arena);
+        return_f64_reg!(self, betai_a_b_x, 4);
+    }
+
+    #[inline(always)]
+    pub(crate) fn invbetai(&mut self) {
+        let a = number_as_f64!(self.deref_register(1));
+        let b = number_as_f64!(self.deref_register(2));
+        let p = number_as_f64!(self.deref_register(3));
+        let x = float_alloc!(invbetai(a,b,p), self.machine_st.arena);
+        return_f64_reg!(self, x, 4);
     }
 
 }

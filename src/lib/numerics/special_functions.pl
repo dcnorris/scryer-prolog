@@ -14,9 +14,9 @@ The underlying Rust implementations come from the
               ,gamma_P_Q/4
               ,invgammp/3
               ,log_gamma/2
-                  %,beta/3
-                  %,betai/4
-                  %,invbetai/4
+              ,beta/3
+              ,betai/4
+              ,invbetai/4
           ]).
 
 %% erf(+X, -Erf)
@@ -115,19 +115,46 @@ log_gamma(X, LnGamma) :-
     builtins:must_be_number(X, log_gamma/2),
     '$ln_gamma'(X, LnGamma).
 
-%% TODO: beta(+Z, +W, -B)
+%% beta(+X, +Y, -B)
 %
-% B is B(Z,W) := Γ(Z)*Γ(W)/Γ(Z+W)
+% B is B(X,Y) ≡ Γ(X)*Γ(Y)/Γ(X+Y)
+%
+% [DLMF  §5.12.1](https://dlmf.nist.gov/5.12#E1)
+% [`puruspe::beta::beta`](https://docs.rs/puruspe/latest/puruspe/beta/fn.beta.html)
+beta(X, Y, B) :-
+    builtins:must_be_number(X, beta/3),
+    builtins:must_be_number(Y, beta/3),
+    '$beta'(X, Y, B).
 
-%% TODO: betai(+A, +B, +X, -I)
+%% betai(+A, +B, +X, -Ix)
 %
-% I is Iₓ(A,B) := B(X;A,B)/B(A,B), the regularized incomplete beta function
-% A > 0 and B > 0 are the first and second shape parameters
-% X ∈ [0,1] is the upper limit of integration.
+% Given:
+%
+% * shape parameters A > 0 and B > 0,
+% * upper limit of integration X ∈ [0,1],
+%
+% Ix is Iₓ(A,B) ≡ B(X;A,B)/B(A,B), the regularized incomplete beta function;
+%
+% [DLMF  §8.17.2](https://dlmf.nist.gov/8.17#E2),
+% [`puruspe::beta::betai`](https://docs.rs/puruspe/latest/puruspe/beta/fn.betai.html)
+betai(A, B, X, Ix) :-
+    builtins:must_be_number(A, betai/4),
+    builtins:must_be_number(B, betai/4),
+    builtins:must_be_number(X, betai/4),
+    '$betai'(A, B, X, Ix).
 
-%% TODO: invbetai(+P, +A, +B, -X)
+%% invbetai(+A, +B, +P, -X)
 %
-% X is the unique solution of P = Iₓ(A,B) := B(X;A,B)/B(A,B)
-% P ∈ [0,1] is a probability
-% A > 0 and B > 0 are the first and second shape parameters
-% X ∈ [0,1] is the upper limit of integration.
+% Given:
+%
+% * shape parameters A > 0 and B > 0,
+% * probability P ∈ [0,1],
+%
+% X ∈ [0,1] is the unique solution of P = Iₓ(A,B) ≡ B(X;A,B)/B(A,B).
+%
+% [`puruspe::beta::invbetai`](https://docs.rs/puruspe/latest/puruspe/beta/fn.invbetai.html)
+invbetai(A, B, P, X) :-
+    builtins:must_be_number(A, invbetai/4),
+    builtins:must_be_number(B, invbetai/4),
+    builtins:must_be_number(P, invbetai/4),
+    '$invbetai'(P, A, B, X).
