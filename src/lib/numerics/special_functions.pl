@@ -1,6 +1,7 @@
 /** Special math functions in the Error, Gamma and Beta families
 
-The underlying Rust implementations come from the puruspe crate.
+The underlying Rust implementations come from the
+[puruspe](https://docs.rs/puruspe/latest/puruspe/) crate.
 */
 
 :- module(special_functions, [
@@ -20,49 +21,54 @@ The underlying Rust implementations come from the puruspe crate.
 
 %% erf(+X, -Erf)
 %
-% Erf is erf(X).
-% TODO: This could be an opportunity to include formatted math via Djot;
-% https://htmlpreview.github.io/?https://github.com/jgm/djot/blob/master/doc/syntax.html#math
-% TODO: Include Djot references to NIST DLMF?  Or defer to puruspe's documentation?
+% Erf is erf(X) for X ∈ ℝ.
+%
+% [DLMF §7.2.1](https://dlmf.nist.gov/7.2#E1),
+% [`puruspe::error::erf`](https://docs.rs/puruspe/latest/puruspe/error/fn.erf.html)
 erf(X, Erf) :-
     builtins:must_be_number(X, erf/2),
     '$erf'(X, Erf).
 
 %% erfc(+X, -Erfc)
 %
-% Erfc is erfc(X).
+% Erfc is erfc(X) for X ∈ ℝ.
+%
+% [DLMF §7.2.2](https://dlmf.nist.gov/7.2#E2),
+% [`puruspe::error::erfc`](https://docs.rs/puruspe/latest/puruspe/error/fn.erfc.html)
 erfc(X, Erfc) :-
     builtins:must_be_number(X, erfc/2),
     '$erfc'(X, Erfc).
 
 %% inverf(+ErfX, -X)
 %
-% X is erf⁻¹(ErfX).
-% ErfX ∈ (-1, 1)
+% X is erf⁻¹(ErfX) for ErfX ∈ (-1,1).
 inverf(ErfX, X) :-
     builtins:must_be_number(ErfX, inverf/2),
     '$inverf'(ErfX, X).
 
 %% inverfc(+ErfcX, -X)
 %
-% X is erfc⁻¹(ErfcX).
-% ErfcX ∈ (0, 2)
+% X is erfc⁻¹(ErfcX) for ErfcX ∈ (0,2).
 inverfc(ErfcX, X) :-
     builtins:must_be_number(ErfcX, inverfc/2),
     '$inverfc'(ErfcX, X).
 
 %% gamma(+X, -Gamma)
 %
-% Gamma is Γ(X), the ordinary gamma function.
+% Gamma is Γ(X), the [ordinary] gamma function evaluated at X ∈ ℝ.
+%
+% [DLMF §5.2.1](https://dlmf.nist.gov/5.2#E1)
+% [`puruspe::gamma::gamma`](https://docs.rs/puruspe/latest/puruspe/gamma/fn.gamma.html)
 gamma(X, Gamma) :-
     builtins:must_be_number(X, gamma/2),
     '$gamma'(X, Gamma).
 
 %% gamma(+A, +X, -Gamma)
 %
-% Gamma is Γ(A,X), the _upper_ incomplete gamma function.
-% A > 0 is the shape parameter
-% X ≥ 0 is the lower limit of integration
+% Gamma is Γ(A,X), the upper incomplete gamma function, where A > 0
+% is the shape parameter and X ≥ 0 is the lower limit of integration.
+%
+% [DLMF §8.2.2](https://dlmf.nist.gov/8.2#E2),
 gamma(A, X, Gamma) :-
     builtins:must_be_number(A, gammq/3),
     builtins:must_be_number(X, gammq/3),
@@ -72,10 +78,15 @@ gamma(A, X, Gamma) :-
 
 %% gamma_P_Q(+A, +X, -P, -Q)
 %
-% P is γ(A,X)/Γ(X), the regularized _lower_ incomplete gamma function.
-% Q is Γ(A,X)/Γ(X), the regularized _upper_ incomplete gamma function.
-% A > 0 is the shape parameter
-% X ≥ 0 is the lower limit of integration
+% For shape parameter A > 0 and lower limit of integration X ≥ 0,
+%
+% * P is γ(A,X)/Γ(X), the regularized _lower_ incomplete gamma function, and
+% 
+% * Q is Γ(A,X)/Γ(X), the regularized _upper_ incomplete gamma function.
+%
+% [DLMF §8.2.4](https://dlmf.nist.gov/8.2#E4),
+% [`puruspe::gammp::gammp`](https://docs.rs/puruspe/latest/puruspe/gamma/fn.gammp.html),
+% [`puruspe::gammp::gammq`](https://docs.rs/puruspe/latest/puruspe/gamma/fn.gammq.html)
 gamma_P_Q(A, X, P, Q) :-
     builtins:must_be_number(A, gamma_P_Q/4),
     builtins:must_be_number(X, gamma_P_Q/4),
@@ -84,10 +95,12 @@ gamma_P_Q(A, X, P, Q) :-
 
 %% invgammp(+A, +P, -X)
 %
+% Given shape parameter A > 0 and probability P ∈ [0,1),
+%
 % X is the unique solution of P = P(A,X), where P(-,-) is the
 % regularized lower incomplete gamma function.
-% P ∈ [0,1] is a probability
-% A > 0 is the _shape parameter_
+%
+% [`puruspe::gamma::invgammp`](https://docs.rs/puruspe/latest/puruspe/gamma/fn.invgammp.html)
 invgammp(A, P, X) :-
     builtins:must_be_number(A, invgammp/3),
     builtins:must_be_number(P, invgammp/3),
@@ -96,6 +109,8 @@ invgammp(A, P, X) :-
 %% log_gamma(+X, -LogGamma)
 %
 % LogGamma is ln(Γ(X)), the natural logarithm of Γ(X).
+%
+% [`puruspe::gamma::ln_gamma`](https://docs.rs/puruspe/latest/puruspe/gamma/fn.ln_gamma.html)
 log_gamma(X, LnGamma) :-
     builtins:must_be_number(X, log_gamma/2),
     '$ln_gamma'(X, LnGamma).
