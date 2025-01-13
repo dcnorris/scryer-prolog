@@ -659,6 +659,8 @@ The modules that ship with Scryer&nbsp;Prolog are also called
   Provides *delimited continuations* via `reset/3` and `shift/1`.
 * [`random`](src/lib/random.pl)
   Probabilistic predicates and random number generators.
+* [`numerics/special_functions`](src/lib/numerics/special_functions.pl)
+  Special math functions in the Error, Gamma and Beta families.
 * [`http/http_open`](src/lib/http/http_open.pl) Open a stream to
   read answers from web&nbsp;servers. HTTPS is also supported.
 * [`http/http_server`](src/lib/http/http_server.pl) Runs a HTTP/1.1 and HTTP/2.0 web server. Uses [Warp](https://github.com/seanmonstar/warp) as a backend. Supports some query and form handling.

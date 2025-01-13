@@ -1,3 +1,8 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Written 2025 by David C. Norris (david@precisionmethods.guru)
+   Part of Scryer Prolog.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
 /** Special math functions in the Error, Gamma and Beta families
 
 The underlying Rust implementations come from the
