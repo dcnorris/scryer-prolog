@@ -1,5 +1,6 @@
-x/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    Written 2025 by David C. Norris (david@precisionmethods.guru)
+   As with all things floating-point, use at your own risk.
    Part of Scryer Prolog.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -171,30 +172,42 @@ invbetai(A, B, P, X) :-
 
 :- use_module(library(numerics/testutils)).
 
+%% test_special_functions
+%
+% Run all tests defined in this module.  (These tests _succeed_ when
+% they find counterexamples, so the 'desirable' result is `false`.)
 test_special_functions :-
-    format("Looking for failed assertions ..~n", []),
+    format("Looking for counterexamples ..~n", []),
     test(T, G), format("% ~s ~n", [T]),
     call(G).
 
-% Default to 1M falsification attempts per assertion:
+% We default to 1M falsification attempts per assertion, and -- more
+% importantly -- use the (unexported) testutils:try_falsify_/2, to
+% avoid testutils:reproducibly/0 fixing an RNG seed.  Thus we obtain
+% truly pseudorandom tests untainted by seed-hacking impropriety.
 :- meta_predicate(try_falsify(1)).
-try_falsify(G) :- try_falsify(1_000_000, G).
+try_falsify(G) :- testutils:try_falsify_(1_000_000, G).
 
+:- discontiguous(test/2).
+
+%% test(+Name, ?Goal)
+%
+% Tests have the signature established by @bakaq's test_framework,
+% each with a user-facing string Name, and a Goal which serves as an
+% _assertion_ by succeeding iff the Name'd desirable property holds.
 test("erf is odd", try_falsify(odd_t(erf, real(_)))).
 
 test("pos root of erf(x)-x", \+ (X0 = 0.6174468790806071, erf(X0, X0))).
 
 test("erfc ≈ 1 - erf", try_falsify(erf_plus_erfc_unity_t(real(_)))).
 
-test("inverf ≈ erf⁻¹",
-     try_falsify(δ_inverses_t(40*epsilon, erf, inverf, interval(-2,2,_)))).
-
-test("('false' is good)", false).
-
-% ------------------------ SPECIAL ASSERTIONS ------------------------
-
 erf_plus_erfc_unity_t(Any, T) :-
     call_free(Any, X), erf(X, Erf), erfc(X, Erfc),
     (   abs(Erf + Erfc - 1) < epsilon -> T = true
     ;   T = false
     ).
+
+test("inverf ≈ erf⁻¹",
+     try_falsify(δ_inverses_t(40*epsilon, erf, inverf, interval(-2,2,_)))).
+
+test("('false' is good)", false).
