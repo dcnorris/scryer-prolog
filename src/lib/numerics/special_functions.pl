@@ -1,4 +1,4 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+x/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    Written 2025 by David C. Norris (david@precisionmethods.guru)
    Part of Scryer Prolog.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -22,6 +22,8 @@ The underlying Rust implementations come from the
               ,beta/3
               ,betai/4
               ,invbetai/4
+              ,test/2
+              ,test_special_functions/0
           ]).
 
 %% erf(+X, -Erf)
@@ -163,3 +165,36 @@ invbetai(A, B, P, X) :-
     builtins:must_be_number(B, invbetai/4),
     builtins:must_be_number(P, invbetai/4),
     '$invbetai'(P, A, B, X).
+
+
+% ============================== TESTS ==============================
+
+:- use_module(library(numerics/testutils)).
+
+test_special_functions :-
+    format("Looking for failed assertions ..~n", []),
+    test(T, G), format("% ~s ~n", [T]),
+    call(G).
+
+% Default to 1M falsification attempts per assertion:
+:- meta_predicate(try_falsify(1)).
+try_falsify(G) :- try_falsify(1_000_000, G).
+
+test("erf is odd", try_falsify(odd_t(erf, real(_)))).
+
+test("pos root of erf(x)-x", \+ (X0 = 0.6174468790806071, erf(X0, X0))).
+
+test("erfc ≈ 1 - erf", try_falsify(erf_plus_erfc_unity_t(real(_)))).
+
+test("inverf ≈ erf⁻¹",
+     try_falsify(δ_inverses_t(40*epsilon, erf, inverf, interval(-2,2,_)))).
+
+test("('false' is good)", false).
+
+% ------------------------ SPECIAL ASSERTIONS ------------------------
+
+erf_plus_erfc_unity_t(Any, T) :-
+    call_free(Any, X), erf(X, Erf), erfc(X, Erfc),
+    (   abs(Erf + Erfc - 1) < epsilon -> T = true
+    ;   T = false
+    ).
